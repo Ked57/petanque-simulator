@@ -6,18 +6,35 @@ using UnityEngine.SceneManagement;
 public class Game {
   public Player playerOne;
   public Player playerTwo;
+  public Player currentPlayer;
   public Ball miniBall;
   public int roundNumber;
-  public bool canBind;
 
   public Game(){
-    this.canBind = true;
-  }
-
-  public void initGame(){
+    this.playerOne = new Player();
+    this.playerTwo = new Player();
     this.playerOne.score = 0;
     this.playerTwo.score = 0;
     this.roundNumber = 0;
+    this.currentPlayer = this.playerOne;
+  }
+
+
+  public void currentBallIsStopped() {
+    if(this.whichPlayerWonTheRound().Equals(this.currentPlayer)) {
+      if(this.currentPlayer.Equals(this.playerOne)) {
+        this.currentPlayer = this.playerTwo;
+      }else {
+        this.currentPlayer = this.playerOne;
+      }
+    }
+  }
+  public void onShoot(GameObject ball) {
+    this.currentPlayer.throwBall(new Ball(ball));
+  }
+
+  public bool canShoot() {
+    return this.currentPlayer.canShoot();
   }
 
   public void throwMiniBall(Ball miniBall){
@@ -25,7 +42,7 @@ public class Game {
   }
 
   public void throwPlayerBall(Player player, Ball ball){
-    this.player.throwBall(ball);
+    player.throwBall(ball);
   }
 
   public void roundStart() {

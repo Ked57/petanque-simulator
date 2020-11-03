@@ -18,8 +18,7 @@ public class Spawner : MonoBehaviour
     public float height = 0.1f;
     public float heightDiff = 1.0f;
 
-    public Game game;
-
+    private Game game = new Game();
 
     void Start()
     {
@@ -32,9 +31,13 @@ public class Spawner : MonoBehaviour
     }
 
     void shoot(GameObject ball){
+        if(!this.game.canShoot()) {
+            return;
+        }
         ball.GetComponent<Rigidbody>().useGravity = true;
         print(calculateForce());
         ball.GetComponent<Rigidbody>().AddForce(calculateForce(), ForceMode.Impulse);
+        this.game.onShoot(ball);
     }
 
     void Update(){
@@ -45,8 +48,15 @@ public class Spawner : MonoBehaviour
             ball = Instantiate(ballPrefab, firePoint.transform.position, Quaternion.identity);
             ball.GetComponent<Rigidbody>().useGravity = false;
         }
-        if (game.canBind){
-            keyBinding();
+        keyBinding();
+        if(this.game.currentPlayer.balls.Count <= 0) {
+            return;
+        }
+        Ball currentPlayerBall = this.game.currentPlayer.balls[this.game.currentPlayer.balls.Count - 1];
+        currentPlayerBall.previousPosition = currentPlayerBall.position;
+        currentPlayerBall.position = currentPlayerBall.ballObject.transform.position;
+        if(!currentPlayerBall.isMoving()) {
+            this.game.currentBallIsStopped();
         }
     }
 
@@ -58,7 +68,7 @@ public class Spawner : MonoBehaviour
 
         if(Input.GetAxis("Mouse Y")<0){
             //Code for action on mouse moving down
-            print("Mouse moved down");
+            //print("Mouse moved down");
             if (power > 1){
                 power = power - powerDiff;
                 predict();
@@ -67,7 +77,7 @@ public class Spawner : MonoBehaviour
 
         if(Input.GetAxis("Mouse Y")>0){
             //Code for action on mouse moving up
-            print("Mouse moved up");
+            //print("Mouse moved up");
             if (power < 20){
                 power = power + powerDiff;
                 predict();
@@ -75,25 +85,25 @@ public class Spawner : MonoBehaviour
         }
 
         if(Input.GetKeyUp(KeyCode.D)){
-            print("Key up D");
+            //print("Key up D");
             angle = angle+angleDiff;
             predict();
         }
 
         if(Input.GetKeyUp(KeyCode.Q)){
-            print("Key up Q");
+            //print("Key up Q");
             angle = angle-angleDiff;
             predict();
         }
 
         if(Input.GetKeyUp(KeyCode.Z)){
-            print("Key up Z");
+            //print("Key up Z");
             height = height+heightDiff;
             predict();
         }
 
         if(Input.GetKeyUp(KeyCode.S)){
-            print("Key up S");
+            //print("Key up S");
             height = height-heightDiff;
             predict();
         }
