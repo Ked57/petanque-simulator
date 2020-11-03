@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Spawner : MonoBehaviour
 {
@@ -16,6 +17,8 @@ public class Spawner : MonoBehaviour
     public float angleDiff = 0.4f;
     public float height = 0.1f;
     public float heightDiff = 1.0f;
+
+    public Game game;
 
 
     void Start()
@@ -42,6 +45,16 @@ public class Spawner : MonoBehaviour
             ball = Instantiate(ballPrefab, firePoint.transform.position, Quaternion.identity);
             ball.GetComponent<Rigidbody>().useGravity = false;
         }
+        if (game.canBind){
+            keyBinding();
+        }
+    }
+
+    void keyBinding(){
+        if(Input.GetKeyUp(KeyCode.Space)){
+            shoot(ball);
+            ball = null;
+        }
 
         if(Input.GetAxis("Mouse Y")<0){
             //Code for action on mouse moving down
@@ -59,11 +72,6 @@ public class Spawner : MonoBehaviour
                 power = power + powerDiff;
                 predict();
             }
-        }
-
-        if(Input.GetKeyUp(KeyCode.Space)){
-            shoot(ball);
-            ball = null;
         }
 
         if(Input.GetKeyUp(KeyCode.D)){
@@ -90,6 +98,7 @@ public class Spawner : MonoBehaviour
             predict();
         }
     }
+
     void predict(){
         PredictionManager.instance.predict(ballPrefab, firePoint.transform.position, calculateForce());
     }
