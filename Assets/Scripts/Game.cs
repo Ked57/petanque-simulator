@@ -23,6 +23,10 @@ public class Game {
     this.player.throwBall(ball);
   }
 
+  public void roundStart() {
+    this.roundNumber ++;
+  }
+
   public void roundFinish() {
     Player winner = whichPlayerWonTheRound();
     winner.score = winner.score + howManyScoreRoundWinnerMade(winner);
