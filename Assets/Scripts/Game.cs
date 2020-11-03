@@ -1,13 +1,18 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Game {
   public Player playerOne;
   public Player playerTwo;
   public Ball miniBall;
-
   public int roundNumber;
+  public bool canBind;
+
+  public Game(){
+    this.canBind = true;
+  }
 
   public void initGame(){
     this.playerOne.score = 0;
@@ -58,38 +63,5 @@ public class Game {
       }
     }
     return roundScore;
-  }
-}
-
-public class Player {
-  public Ball[] balls;
-  public int score;
-
-  public void throwBall(Ball ball){
-    if (this.balls.Length <= 3){
-      this.balls.append(ball);
-    }
-  }
-
-  public float minimalDistanceOfBallFromAnother(Ball ball){
-    float res = null;
-    foreach (Ball pBall in this.balls){
-      if(res){
-        res = pBall.distanceWithAnotherBall(ball);
-      } else {
-        if (res > pBall.distanceWithAnotherBall(ball)){
-          res = pBall.distanceWithAnotherBall(ball);
-        }
-      }
-    }
-    return res;
-  }
-}
-
-public class Ball {
-  public Vector position;
-
-  public float distanceWithAnotherBall(Ball ball){
-    return Vector3.Distance(this.position, ball.position);
   }
 }
