@@ -31,13 +31,13 @@ public class Spawner : MonoBehaviour
     }
 
     void shoot(GameObject ball){
-        if(!this.game.canShoot()) {
+        /* if(!this.game.canShoot()) {
             return;
-        }
+        } */
         ball.GetComponent<Rigidbody>().useGravity = true;
         print(calculateForce());
         ball.GetComponent<Rigidbody>().AddForce(calculateForce(), ForceMode.Impulse);
-        this.game.onShoot(ball);
+        //this.game.onShoot(ball);
     }
 
     void Update(){
@@ -49,7 +49,7 @@ public class Spawner : MonoBehaviour
             ball.GetComponent<Rigidbody>().useGravity = false;
         }
         keyBinding();
-        if(this.game.currentPlayer.balls.Count <= 0) {
+        /* if(this.game.currentPlayer.balls.Count <= 0) {
             return;
         }
         Ball currentPlayerBall = this.game.currentPlayer.balls[this.game.currentPlayer.balls.Count - 1];
@@ -57,7 +57,7 @@ public class Spawner : MonoBehaviour
         currentPlayerBall.position = currentPlayerBall.ballObject.transform.position;
         if(!currentPlayerBall.isMoving()) {
             this.game.currentBallIsStopped();
-        }
+        } */
     }
 
     void keyBinding(){
